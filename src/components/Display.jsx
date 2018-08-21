@@ -1,12 +1,39 @@
 import React, { Component } from 'react';
-import monthConverter from '../monthConversion';
+//import monthConverter from '../monthConversion'
 import '../App.css';
+import axios from 'axios';
 
 
 class Display extends Component {
+  constructor(props) {
+    super(props);
+
+    this.getData = this.getData.bind(this);
+    // this.handleInputChange = this.handleInputChange.bind(this);
+    // this.handlePremadeClick = this.handlePremadeClick.bind(this);
+  }
+
+  getData() {
+    axios.get("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans")
+    .then( (data) => {
+      console.log(data);
+      return data;
+    }).catch(err => console.log(err));
+  }
+  
+  showData(data) {
+    data.map( (d) => {
+      return (
+        <div>
+          
+        </div>
+      );
+    });
+  }
+  
   render() {
     return (
-      <div className="Display">
+      <div className="Display" onClick={this.getData}>
         <table>
           <th>TITLE</th>
           <th>2nd</th>
@@ -20,79 +47,4 @@ class Display extends Component {
 
 export default Display;
 
-function showData(data) {
-  data.map( (d) => {
-    return (
-      <div>
-        
-      </div>
-    );
-  });
-}
 
-const BPSDivider = 10000;
-
-const DATA = [
-  {
-    month: 4,
-    year: 2018,
-    info: {
-      first: [
-        {
-          borrower: "Joe Schmoe",
-          agent: "Leslie Black",
-          dateFunded: "2018-08-15",
-          loanAmount: 405000.00,
-          BPS: 97
-        },
-        {
-          borrower: "Dank Meme",
-          agent: "Jimmy Neutron",
-          dateFunded: "2018-08-14",
-          loanAmount: 292500.00,
-          BPS: 97
-        }
-      ],
-      second: [
-        {
-          borrower: "Jane Doe",
-          agent: "Leslie Black",
-          dateFunded: "2018-08-25",
-          loanAmount: 300250.00,
-          BPS: 107
-        }
-      ]
-    }
-  },
-  {
-    month: 5,
-    year: 2018,
-    info: {
-      first: [
-        {
-          borrower: "Joe Schmoe",
-          agent: "Leslie Black",
-          dateFunded: "2018-08-15",
-          loanAmount: 405000.00,
-          BPS: 97
-        },
-        {
-          borrower: "Dank Meme",
-          agent: "Jimmy Neutron",
-          dateFunded: "2018-08-14",
-          loanAmount: 292500.00,
-          BPS: 97
-        }
-      ],
-      second: [
-        {
-          borrower: "Jane Doe",
-          agent: "Leslie Black",
-          dateFunded: "2018-08-25",
-          loanAmount: 300250.00,
-          BPS: 107
-        }
-      ]
-    }
-  }
-]
