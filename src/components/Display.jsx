@@ -34,12 +34,7 @@ class Display extends Component {
   render() {
     return (
       <div className="Display" onClick={this.getData}>
-        <table>
-          <th>TITLE</th>
-          <th>2nd</th>
-          <tr>something</tr>
-          <td>new thing</td>
-        </table>
+        <h3>Text</h3>
       </div>
     );
   }
