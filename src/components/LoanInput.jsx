@@ -9,9 +9,9 @@ class LoanInput extends Component {
     this.state = {
         borrower: '',
         agent: '',
-        loanAmount: 0,
-        dateFunded: "2000-01-01",
-        BPS: 0
+        loanAmount: '',
+        dateFunded: '',
+        BPS: ''
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -40,16 +40,28 @@ class LoanInput extends Component {
             BPS: this.state.BPS
         }
     }
-    console.log(bodyData);
-    axios.post("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans",bodyData);
-    this.setState(
-        {
-            borrower: '',
-            agent: '',
-            loanAmount: 0,
-            dateFunded: "2000-01-01",
-            BPS: 0 
-        });
+    // console.log(bodyData);
+    // if (bodyData.month && bodyData.year && bodyData.period && bodyData.info.borrower && bodyData.info.agent && bodyData.info.dateFunded && bodyData.info.loanAmount && bodyData.info.BPS) {
+        axios.post("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans",bodyData)
+        .then( () => {
+            var messageContainer = document.getElementById("flashMessage");
+            messageContainer.textContent = "Entry successfully saved to database.";
+            this.setState({
+                borrower: '',
+                agent: '',
+                loanAmount: '',
+                dateFunded: '',
+                BPS: ''
+            });
+        })
+        .catch( err => {
+            console.log(err);
+            var messageContainer = document.getElementById("flashMessage");
+            messageContainer.textContent = "An error occured. " + err;
+        })
+    // } else {
+    //     alert("Please fill in all fields");   
+    // }
   }
 
   borrowerChange(event) {
@@ -79,26 +91,27 @@ class LoanInput extends Component {
         <form onSubmit={this.handleSubmit}>
             <div className="form-group">
                 <label htmlFor="borrowerName">Borrower</label>
-                <input onChange={ this.borrowerChange } value={ this.state.borrower } className="form-control" type="text"/>
+                <input required onChange={ this.borrowerChange } value={ this.state.borrower } className="form-control" type="text"/>
             </div>
             <div className="form-group">
                 <label htmlFor="agentName">Agent</label>
-                <input onChange={ this.agentChange } value={ this.state.agent } className="form-control" type="text"/>
+                <input required onChange={ this.agentChange } value={ this.state.agent } className="form-control" type="text"/>
             </div>
             <div className="form-group">
                 <label htmlFor="loanAmount">Loan Amount</label>
-                <input onChange={ this.loanAmountChange } value={ this.state.loanAmount } className="form-control" type="number"/>
+                <input required onChange={ this.loanAmountChange } value={ this.state.loanAmount } className="form-control" type="number"/>
             </div>
             <div className="form-group">
                 <label htmlFor="dateFunded">Date Funded</label>
-                <input onChange={ this.dateFundedChange } value={ this.state.dateFunded } className="form-control" type="date"/>
+                <input required onChange={ this.dateFundedChange } value={ this.state.dateFunded } className="form-control" type="date"/>
             </div>
             <div className="form-group">
                 <label htmlFor="BPS">BPS</label>
-                <input onChange={ this.BPSChange } value={ this.state.BPS } className="form-control" type="number"/>
+                <input required onChange={ this.BPSChange } value={ this.state.BPS } className="form-control" type="number"/>
             </div>
             <button type="submit" className="btn btn-primary">Submit new Loan</button>
         </form>
+        <p id="flashMessage"></p>
       </div>
     );
   }
