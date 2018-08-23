@@ -40,28 +40,23 @@ class LoanInput extends Component {
             BPS: this.state.BPS
         }
     }
-    // console.log(bodyData);
-    // if (bodyData.month && bodyData.year && bodyData.period && bodyData.info.borrower && bodyData.info.agent && bodyData.info.dateFunded && bodyData.info.loanAmount && bodyData.info.BPS) {
-        axios.post("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans",bodyData)
-        .then( () => {
-            var messageContainer = document.getElementById("flashMessage");
-            messageContainer.textContent = "Entry successfully saved to database.";
-            this.setState({
-                borrower: '',
-                agent: '',
-                loanAmount: '',
-                dateFunded: '',
-                BPS: ''
-            });
-        })
-        .catch( err => {
-            console.log(err);
-            var messageContainer = document.getElementById("flashMessage");
-            messageContainer.textContent = "An error occured. " + err;
-        })
-    // } else {
-    //     alert("Please fill in all fields");   
-    // }
+    axios.post("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans",bodyData)
+    .then( () => {
+        var messageContainer = document.getElementById("flashMessage");
+        messageContainer.textContent = "Entry successfully saved to database.";
+        this.setState({
+            borrower: '',
+            agent: '',
+            loanAmount: '',
+            dateFunded: '',
+            BPS: ''
+        });
+    })
+    .catch( err => {
+        console.log(err);
+        var messageContainer = document.getElementById("flashMessage");
+        messageContainer.textContent = "An error occured. " + err;
+    })
   }
 
   borrowerChange(event) {
