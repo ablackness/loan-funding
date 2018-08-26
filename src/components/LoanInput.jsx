@@ -43,7 +43,7 @@ class LoanInput extends Component {
     axios.post("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans",bodyData)
     .then( () => {
         var messageContainer = document.getElementById("flashMessage");
-        messageContainer.textContent = "Entry successfully saved to database.";
+        messageContainer.textContent = "Thank you for your submission";
         this.setState({
             borrower: '',
             agent: '',
@@ -82,7 +82,7 @@ class LoanInput extends Component {
   render() {
     return (
       <div className="LoanInput">
-        <h1>Loan Input</h1>
+        <h3>Loan Input</h3>
         <form onSubmit={this.handleSubmit}>
             <div className="form-group">
                 <label htmlFor="borrowerName">Borrower</label>

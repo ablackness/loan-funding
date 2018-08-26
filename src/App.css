@@ -2,6 +2,18 @@
   text-align: center;
 }
 
+.label-parent {
+  text-align: left;
+}
+
+.labels {
+  padding-left: 20px;
+}
+
+#show-loans {
+  margin: 18px;
+}
+
 .form-group {
   padding-left: 30px;
   padding-right: 30px;
@@ -9,7 +21,7 @@
 
 .month-input {
       /* border: 0; */
-    /* width: 100%; */
+    width: 100px;
     cursor: auto;
     outline: 0;
     height: 100%;
@@ -19,6 +31,10 @@
     border-radius: 4px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.month-select {
+  text-align: left;
 }
 
 .picker-panel {

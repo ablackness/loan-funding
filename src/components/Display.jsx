@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
 import YearPicker from "react-year-picker";
+import MonthDisplay from "./MonthDisplay";
 import '../App.css';
-import axios from 'axios';
-
 
 class Display extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      month: '',
-      year: ''
+      month: "",
+      year: "",
+      showMonths: false
     }
 
-    this.getData = this.getData.bind(this);
     this.updateMonth = this.updateMonth.bind(this);
     this.updateYear = this.updateYear.bind(this);
   }
 
+  updateShowMonths() {
+    this.setState({
+      showMonths: false
+    })
+  }
+
   updateMonth(month) {
     this.setState({
-      month: month.target.value
+      month: month.target.value,
+      showMonths: true
     })
   }
 
@@ -29,27 +35,19 @@ class Display extends Component {
       year: year
     })
   }
-
-  getData() {
-    axios.get("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans")
-    .then( (data) => {
-      console.log(data);
-      return data;
-    }).catch(err => console.log(err));
-  }
   
   render() {
     return (
       <div className="Display">
-        <div className='row'>
-          <label className="col-md-1 col-form-label">Year</label>
+        <div className='label-parent row'>
+          <label className="labels col-md-1 col-form-label">Year</label>
           <div  className="col-md-3">  
             <YearPicker onChange={ this.updateYear }/>
           </div>
         </div>    
-        <div className='row'>
-          <label className="col-md-1 col-form-label">Month</label>
-          <div className="col-md-1">
+        <div className='label-parent row'>
+          <label className="labels col-md-1 col-form-label">Month</label>
+          <div className="month-select col-md-3">
             <select onChange={ this.updateMonth }className='month-input'>
               <option value="1">1 - Jan</option>
               <option value="2">2 - Feb</option>
@@ -66,6 +64,10 @@ class Display extends Component {
             </select> 
           </div>
         </div>
+        <div className="row">
+          <button id="show-loans" className="btn btn-primary col-md-2">Show Loan Info</button>
+        </div>
+        <MonthDisplay month={ this.state.month } year={ this.state.year } showMonths={ this.state.showMonths }/>
       </div>
     );
   }
