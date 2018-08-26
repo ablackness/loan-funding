@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import '../App.css';
+import Table from './Table';
 
 class MonthDisplay extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      // eslint-disable-next-line
       month1: '',
       month2: ''
     }
@@ -15,36 +15,58 @@ class MonthDisplay extends Component {
     this.p = this.p.bind(this);
     this.getData = this.getData.bind(this);
     this.displayData = this.displayData.bind(this);
+    this.sortData = this.sortData.bind(this);
   }
 
   componentWillReceiveProps(props) {
-    var lastMonth = props.month - 1;
+    console.log("props in Month Display",props);
+    var lastMonth = props.UIMonth - 1;
     this.setState({
       month1: decodeMonth(lastMonth.toString()),
-      month2: decodeMonth(props.month)
+      month2: decodeMonth(props.UIMonth)
     })
+  }
+
+  componentWillMount() {
+    this.getData();
   }
 
   getData() {
-    return axios.get("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans")
+    axios.get("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans")
     .then( (data) => {
       //console.log(data);
-      return data;
+      this.props.updateData(data.data);
     }).catch(err => console.log(err));
   }
 
-  displayData() {
-    this.getData()
-    .then( res => {
-      console.log(res);
+  sortData(records, month, year) {
+    console.log("parameters in sortData", records, month, year);
+    var results = [];
+    records.map( record => {
+      if(record.year === year && record.month === month) {
+        results.push(record);
+      }
+    });
+    console.log("results from sortData", results);
+    return results;
+  }
+
+  displayData(lastMonth, month) {
+    console.log("parameters in disaplyData", lastMonth, month);
       return (
         <div>
-          <div>
-            { res.data[0].loanAmount }
+         <div className="row">
+          <div className="col-lg-6">
+            <h1>{ this.state.month1 }</h1>
+            <Table data = { lastMonth }/>
           </div>
+          <div className="col-lg-6">
+            <h1>{ this.state.month2 }</h1>
+            <Table data = { month } />
+          </div>      
         </div>
-      )
-    })
+      </div>
+      )   
   }
 
   p() {
@@ -53,18 +75,15 @@ class MonthDisplay extends Component {
   }
 
   render() {
-    //var loanDisplay = this.displayData();
+    var loanDisplay;
+    if (this.props.showMonths) {
+      loanDisplay = this.displayData(this.sortData(this.props.data, (parseInt(this.props.UIMonth) - 1),this.props.UIYear),this.sortData(this.props.data, parseInt(this.props.UIMonth), this.props.UIYear));
+    } else {
+      loanDisplay = <div></div>
+    }
     return (
-      <div className="MonthDisplay" onClick={this.displayData}>
-        <div className="row">
-          <div className="col-lg-6">
-            <h1>{ this.props.showMonths ? this.state.month1 : "" }</h1>
-            
-          </div>
-          <div className="col-lg-6">
-            <h1>{ this.props.showMonths ? this.state.month2 : "" }</h1>
-          </div>
-        </div>
+      <div className="MonthDisplay" onClick={ () => this.sortData(this.props.data,parseInt(this.props.UIMonth), this.props.UIYear)}>
+        { loanDisplay }
       </div>
     );
   }

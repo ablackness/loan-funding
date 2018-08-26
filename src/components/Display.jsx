@@ -8,31 +8,41 @@ class Display extends Component {
     super(props);
 
     this.state = {
-      month: "",
-      year: "",
-      showMonths: false
+      UIMonth: "",
+      UIYear: "",
+      showMonths: false,
+      data: []
     }
 
     this.updateMonth = this.updateMonth.bind(this);
     this.updateYear = this.updateYear.bind(this);
+    this.updateData = this.updateData.bind(this);
+    this.updateShowMonths = this.updateShowMonths.bind(this);
+  }
+
+  updateData(data) {
+    this.setState({
+      data: data
+    })
   }
 
   updateShowMonths() {
-    this.setState({
-      showMonths: false
-    })
+    if (this.state.UIMonth !== "" && this.state.UIYear !== "") {
+      this.setState({
+        showMonths: true
+      })
+    }
   }
 
   updateMonth(month) {
     this.setState({
-      month: month.target.value,
-      showMonths: true
+      UIMonth: month.target.value
     })
   }
 
   updateYear(year) {
     this.setState({
-      year: year
+      UIYear: year
     })
   }
   
@@ -48,7 +58,8 @@ class Display extends Component {
         <div className='label-parent row'>
           <label className="labels col-md-1 col-form-label">Month</label>
           <div className="month-select col-md-3">
-            <select onChange={ this.updateMonth }className='month-input'>
+            <select defaultValue="" onChange={ this.updateMonth } className='month-input'>
+              <option value="" disabled hidden> - </option>
               <option value="1">1 - Jan</option>
               <option value="2">2 - Feb</option>
               <option value="3">3 - Mar</option>
@@ -65,9 +76,17 @@ class Display extends Component {
           </div>
         </div>
         <div className="row">
-          <button id="show-loans" className="btn btn-primary col-md-2">Show Loan Info</button>
+          <button id="show-loans" className="btn btn-primary col-md-2" onClick={ this.updateShowMonths }>Show Loan Info</button>
         </div>
-        <MonthDisplay month={ this.state.month } year={ this.state.year } showMonths={ this.state.showMonths }/>
+        <MonthDisplay UIMonth={ this.state.UIMonth } 
+                      UIYear={ this.state.UIYear } 
+                      showMonths={ this.state.showMonths }
+                      updateData={ this.updateData }
+                      data = { this.state.data }
+                      // year={ this.state.data.year }
+                      // month={ this.state.data.month }
+                      // period={ this.state.data.period }
+                    />
       </div>
     );
   }
