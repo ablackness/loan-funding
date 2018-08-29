@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
 import '../App.css';
 
+var bigFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+});
+
+var formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+});
+
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -17,11 +29,13 @@ class Table extends Component {
         return (
             <div className='row rows' key={d.loanID}>
                 <div className='col-md-1'></div>
+                <div className='col-md-1'>{ d.period }</div>
                 <div className='col-md-2'>{ d.borrower }</div>
                 <div className='col-md-2'>{ d.agent }</div>
-                <div className='col-md-2'>{ d.loanAmount }</div>
-                <div className='col-md-2'>{ d.BPS }</div>
-                <div className='col-md-2'>{ d.period }</div>
+                <div className='col-md-1'>{ d.dateFunded }</div>
+                <div className='col-md-2'>{ bigFormatter.format(d.loanAmount) }</div>
+                <div className='col-md-1'>{ d.BPS }</div>
+                <div className='col-md-2'>{ formatter.format(d.payout) }</div>
             </div>
             )
         }    
@@ -34,11 +48,14 @@ class Table extends Component {
       <div className="Table">
         <div className='row titles'>
             <div className='col-md-1'></div>
+            <div className='col-md-1'><strong>PERIOD</strong></div>
             <div className='col-md-2'><strong>BORROWER</strong></div>
             <div className='col-md-2'><strong>AGENT</strong></div>
+            <div className='col-md-1'><strong>FUNDED DATE</strong></div>
             <div className='col-md-2'><strong>AMOUNT</strong></div>
-            <div className='col-md-2'><strong>BPS</strong></div>
-            <div className='col-md-2'><strong>PERIOD</strong></div>
+            <div className='col-md-1'><strong>BPS</strong></div>
+            <div className='col-md-2'><strong>PAYOUT</strong></div>
+            
         </div>
         { t }
       </div>

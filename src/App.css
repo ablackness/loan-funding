@@ -41,3 +41,12 @@
   top: 24px !important;
   z-index: 5;
 }
+
+/* Table Header */
+.rows, .titles{
+  text-align: center;
+}
+
+.rows div, .titles div {
+  padding: 0;
+}
