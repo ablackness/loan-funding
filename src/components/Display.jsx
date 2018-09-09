@@ -3,6 +3,12 @@ import YearPicker from "react-year-picker";
 import MonthDisplay from "./MonthDisplay";
 import '../App.css';
 
+var formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+});
+
 class Display extends Component {
   constructor(props) {
     super(props);
@@ -11,13 +17,17 @@ class Display extends Component {
       UIMonth: "",
       UIYear: "",
       showMonths: false,
-      data: []
+      data: [],
+      lastMonthPeriod2: 0,
+      thisMonthPeriod1: 0
     }
 
     this.updateMonth = this.updateMonth.bind(this);
     this.updateYear = this.updateYear.bind(this);
     this.updateData = this.updateData.bind(this);
     this.updateShowMonths = this.updateShowMonths.bind(this);
+    this.updatePayoutLastMonthPeriod2 = this.updatePayoutLastMonthPeriod2.bind(this);
+    this.updatePayoutThisMonthPeriod1 = this.updatePayoutThisMonthPeriod1.bind(this);
   }
 
   updateData(data) {
@@ -36,17 +46,40 @@ class Display extends Component {
 
   updateMonth(month) {
     this.setState({
-      UIMonth: month.target.value
+      UIMonth: month.target.value,
+      showMonths: false
     })
   }
 
   updateYear(year) {
     this.setState({
-      UIYear: year
+      UIYear: year,
+      showMonths: false
+    })
+  }
+
+  updatePayoutLastMonthPeriod2(subtotal) {
+    this.setState({
+      lastMonthPeriod2: subtotal
+    })
+  }
+
+  updatePayoutThisMonthPeriod1(subtotal) {
+    this.setState({
+      thisMonthPeriod1: subtotal
     })
   }
   
   render() {
+    var legend;
+    if (this.state.showMonths) {
+      legend = (
+        <span>
+          <strong>LEGEND:</strong>
+          <p className='highlight'>{'Payout for ' + decodeMonth(this.state.UIMonth) + ': ' + formatter.format(this.state.lastMonthPeriod2 + this.state.thisMonthPeriod1)}</p>
+        </span>
+      )
+    }
     return (
       <div className="Display">
         <div className='label-parent row'>
@@ -77,15 +110,18 @@ class Display extends Component {
         </div>
         <div className="row">
           <button id="show-loans" className="btn btn-primary col-md-2" onClick={ this.updateShowMonths }>Show Loan Info</button>
+          <div className='col-md-3'></div>
+          <div className='col-md-3'>
+            { legend }
+          </div>
         </div>
         <MonthDisplay UIMonth={ this.state.UIMonth } 
                       UIYear={ this.state.UIYear } 
                       showMonths={ this.state.showMonths }
                       updateData={ this.updateData }
                       data = { this.state.data }
-                      // year={ this.state.data.year }
-                      // month={ this.state.data.month }
-                      // period={ this.state.data.period }
+                      updatePayoutLastMonthPeriod2 = { this.updatePayoutLastMonthPeriod2 }
+                      updatePayoutThisMonthPeriod1 = { this.updatePayoutThisMonthPeriod1 }
                     />
       </div>
     );
@@ -94,4 +130,46 @@ class Display extends Component {
 
 export default Display;
 
+function decodeMonth(month) {
+  if (month === "0") month = "12";
+  switch (month) {
+    case "1":
+      return "January"
 
+    case "2":
+      return "February"
+
+    case "3": 
+      return "March"
+
+    case "4":
+      return "April"
+
+    case "5":
+      return "May"
+
+    case "6":
+      return "June"
+
+    case "7":
+      return "July"
+
+    case "8":
+      return "August"
+
+    case "9":
+      return "September"
+
+    case "10":
+      return "October"
+
+    case "11":
+      return "November"
+
+    case "12":
+      return "December"
+
+    default:
+      return "Not a valid month"
+  }
+}

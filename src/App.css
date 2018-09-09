@@ -50,3 +50,8 @@
 .rows div, .titles div {
   padding: 0;
 }
+
+/* Highlight rows for selected months payout */
+.highlight {
+  background-color: lightgreen;
+}
