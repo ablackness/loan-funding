@@ -111,7 +111,7 @@ class Display extends Component {
         <div className="row">
           <button id="show-loans" className="btn btn-primary col-md-2" onClick={ this.updateShowMonths }>Show Loan Info</button>
           <div className='col-md-3'></div>
-          <div className='col-md-3'>
+          <div className='col-md-2'>
             { legend }
           </div>
         </div>

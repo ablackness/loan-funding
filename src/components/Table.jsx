@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import TableRow from './TableRow';
 import '../App.css';
 
-var bigFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 0,
-});
+// var bigFormatter = new Intl.NumberFormat('en-US', {
+//   style: 'currency',
+//   currency: 'USD',
+//   minimumFractionDigits: 0,
+// });
 
 var formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -69,23 +70,34 @@ class Table extends Component {
       data.sort(function(a, b) {
           return (new Date(a.dateFunded) - new Date(b.dateFunded));
       })
-      var periodHighlight;
-      // eslint-disable-next-line
-      if((this.props.position === 1 && data[0].period == 2) || (this.props.position === 2 && data[0].period == 1)) {
-        periodHighlight = 'highlight';
-      }
+      // var periodHighlight;
+      // // eslint-disable-next-line
+      // if((this.props.position === 1 && data[0].period == 2) || (this.props.position === 2 && data[0].period == 1)) {
+      //   periodHighlight = 'highlight';
+      // }
+      // var editWidget;
+      // if (this.props.editing) {
+      //   editWidget = (
+      //     <div className="col-md-1">
+      //       <i className="pointer icon pencil oi oi-pencil"></i>
+      //       <i className="pointer icon x oi oi-x"></i>
+      //       <i className="pointer icon check oi oi-check"></i>
+      //     </div>
+      //   );
+      // } else editWidget = <div className="col-md-1"></div>;
       return data.map( d => {
           return (
-              <div className={'row rows ' + periodHighlight} key={d.loanID}>
-                  <div className='col-md-1'></div>
-                  <div className='col-md-1'>{ d.period }</div>
-                  <div className='col-md-2'>{ d.borrower }</div>
-                  <div className='col-md-2'>{ d.agent }</div>
-                  <div className='col-md-1'>{ d.dateFunded }</div>
-                  <div className='col-md-2'>{ bigFormatter.format(d.loanAmount) }</div>
-                  <div className='col-md-1'>{ d.BPS }</div>
-                  <div className='col-md-2'>{ formatter.format(d.payout) }</div>
-              </div>
+                <TableRow rowData={ d } editingMonth = { this.props.editing }/>
+                // <div className={'row rows ' + periodHighlight} key={d.loanID}>
+                //     { editWidget }
+                //     <div className='col-md-1'>{ d.period }</div>
+                //     <div className='col-md-2'>{ d.borrower }</div>
+                //     <div className='col-md-2'>{ d.agent }</div>
+                //     <div className='col-md-1'>{ d.dateFunded }</div>
+                //     <div className='col-md-2'>{ bigFormatter.format(d.loanAmount) }</div>
+                //     <div className='col-md-1'>{ d.BPS }</div>
+                //     <div className='col-md-2'>{ formatter.format(d.payout) }</div>
+                // </div>
               )
           }    
       )
