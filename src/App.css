@@ -57,13 +57,20 @@
 
 /* Highlight rows for selected months payout */
 .highlight {
-  background-color: lightgreen;
+  background-color: lightsteelblue;
 }
 
-/* edit button styling */
-.editButton{
-  float: left;
-  margin-left: 17px;
+.notPayoutRows {
+  background-color: lightseagreen
+}
+
+/* Highlight subtotal and total rows */
+.subtotal {
+  background-color: lightgray;
+}
+
+.total {
+  background-color: lightgoldenrodyellow;
 }
 
 .monthHeader{
@@ -72,13 +79,14 @@
   clear: left;
 }
 
+/*Icon styling */
 .icon {
   padding-left: 5px;
   padding-right: 5px;
 }
 
 .pencil {
-  color: #f0ad4e;
+  color: #743d10;
 }
 
 .x {
@@ -91,4 +99,11 @@
 
 .pointer {
   cursor: pointer;
+}
+
+/* Input styles for edit mode */
+.row > input {
+  max-height: 20px;
+  text-align: center;
+  padding: 0;
 }

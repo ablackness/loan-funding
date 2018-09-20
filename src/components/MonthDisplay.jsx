@@ -12,15 +12,11 @@ class MonthDisplay extends Component {
     this.state = {
       month1: '',
       month2: '',
-      editingLastMonth: false,
-      editingThisMonth: false
     }
 
     this.getData = this.getData.bind(this);
     this.displayData = this.displayData.bind(this);
     this.sortData = this.sortData.bind(this);
-    this.handleEditLastMonth = this.handleEditLastMonth.bind(this);
-    this.handleEditThisMonth = this.handleEditThisMonth.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -131,6 +127,18 @@ class MonthDisplay extends Component {
           payout:12423,
           period:2,
           year:2018
+        },
+        {
+          BPS: "95",
+          agent: "A5",
+          borrower: "B5",
+          dateFunded: "2018-08-19",
+          loanAmount: "215000",
+          loanID: "13lo1j1tqmxny",
+          month: 8,
+          payout: 2056.5285,
+          period: 2,
+          year: 2018
         }
     ]
       this.props.updateData(fakeData);
@@ -157,59 +165,29 @@ class MonthDisplay extends Component {
     return results;
   }
 
-  handleEditLastMonth() {
-    if (this.state.editingLastMonth) {
-      this.setState({
-        editingLastMonth: false
-      })
-    } else {
-      this.setState({
-        editingLastMonth: true
-      })
-    }
-  }
-
-  handleEditThisMonth() {
-    if (this.state.editingThisMonth) {
-      this.setState({
-        editingThisMonth: false
-      })
-    } else {
-      this.setState({
-        editingThisMonth: true
-      })
-    }
-  }
-
   displayData(lastMonth, month) {
-      var lastMonthEditText = this.state.editingLastMonth ? "stop editing" : "edit";
-      var thisMonthEditText = this.state.editingThisMonth ? "stop editing" : "edit";
       return (
         <div>
          <div className="row">
           <div className="col-lg-6">
             <div className="row">
-              <div className="col-md-2">
-                <button className='editButton btn btn-warning' onClick = { this.handleEditLastMonth }>{ lastMonthEditText }</button>
-              </div>
+              <div className="col-md-2"></div>
               <div className="col-md-2"></div>
               <div className="col-md-4">
                 <h1 className='monthHeader'>{ this.state.month1 }</h1>
               </div>
             </div>
-            <Table data = { lastMonth } position = { 1 } editing = { this.state.editingLastMonth } updatePayoutLastMonthPeriod2 = { this.props.updatePayoutLastMonthPeriod2 }/>
+            <Table data = { lastMonth } position = { 1 } updatePayoutLastMonthPeriod2 = { this.props.updatePayoutLastMonthPeriod2 }/>
           </div>
           <div className="col-lg-6">
             <div className="row">
-              <div className="col-md-2">
-                <button className='editButton btn btn-warning' onClick = { this.handleEditThisMonth }>{ thisMonthEditText }</button>
-              </div>
+              <div className="col-md-2"></div>
               <div className="col-md-2"></div>
               <div className="col-md-4">
                 <h1 className='monthHeader'>{ this.state.month2 }</h1>
               </div>
             </div>
-            <Table data = { month } position = { 2 } editing = { this.state.editingThisMonth } updatePayoutThisMonthPeriod1 = { this.props.updatePayoutThisMonthPeriod1 }/>
+            <Table data = { month } position = { 2 } updatePayoutThisMonthPeriod1 = { this.props.updatePayoutThisMonthPeriod1 }/>
           </div>      
         </div>
       </div>

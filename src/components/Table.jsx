@@ -14,36 +14,51 @@ var formatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2,
 });
 
-const reducer = (acc, currentValue) => acc + currentValue.payout;
+var bigFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+});
 
-const calcSubtotal = (period) => {
-  return period.reduce(reducer,0);
+const payoutReducer = (acc, currentValue) => acc + currentValue.payout;
+const fundedReducer = (acc, currentValue) => acc + parseInt(currentValue.loanAmount);
+
+const calcPayoutSubtotal = (period) => {
+  return period.reduce(payoutReducer,0);
 }
 
-const calcTotal = (periods) => {
-  return periods.reduce(reducer, 0);
+const calcFundedSubtotal = (period) => {
+  return period.reduce(fundedReducer,0);
+}
+
+const calcFundedTotal = (periods) => {
+  return periods.reduce(fundedReducer, 0);
 }
 
 class Table extends Component {
   constructor(props) {
     super(props);
 
-    var total = calcTotal(props.data);
-    total = formatter.format(total);
-    var subTotal1 = calcSubtotal(this.splitPeriods(props.data)[0]);
-    var subTotal2 = calcSubtotal(this.splitPeriods(props.data)[1]);
+    var fundedTotal = calcFundedTotal(props.data);
+    fundedTotal = bigFormatter.format(fundedTotal);
+    var payoutSubtotal1 = calcPayoutSubtotal(this.splitPeriods(props.data)[0]);
+    var payoutSubtotal2 = calcPayoutSubtotal(this.splitPeriods(props.data)[1]);
+    var fundedSubtotal1 = calcFundedSubtotal(this.splitPeriods(props.data)[0]);
+    var fundedSubtotal2 = calcFundedSubtotal(this.splitPeriods(props.data)[1]);
 
     this.state = {
-      payout: total,
-      subTotal1: subTotal1,
-      subTotal2: subTotal2
+      fundedTotal: fundedTotal,
+      payoutSubtotal1: payoutSubtotal1,
+      payoutSubtotal2: payoutSubtotal2,
+      fundedSubtotal1: fundedSubtotal1,
+      fundedSubtotal2: fundedSubtotal2
     }
 
     if (props.position === 1) {
-      props.updatePayoutLastMonthPeriod2(subTotal2);
+      props.updatePayoutLastMonthPeriod2(payoutSubtotal2);
     }
     if (props.position === 2) {
-      props.updatePayoutThisMonthPeriod1(subTotal1);
+      props.updatePayoutThisMonthPeriod1(payoutSubtotal1);
     }
 
     this.buildTable = this.buildTable.bind(this);
@@ -70,34 +85,9 @@ class Table extends Component {
       data.sort(function(a, b) {
           return (new Date(a.dateFunded) - new Date(b.dateFunded));
       })
-      // var periodHighlight;
-      // // eslint-disable-next-line
-      // if((this.props.position === 1 && data[0].period == 2) || (this.props.position === 2 && data[0].period == 1)) {
-      //   periodHighlight = 'highlight';
-      // }
-      // var editWidget;
-      // if (this.props.editing) {
-      //   editWidget = (
-      //     <div className="col-md-1">
-      //       <i className="pointer icon pencil oi oi-pencil"></i>
-      //       <i className="pointer icon x oi oi-x"></i>
-      //       <i className="pointer icon check oi oi-check"></i>
-      //     </div>
-      //   );
-      // } else editWidget = <div className="col-md-1"></div>;
       return data.map( d => {
           return (
-                <TableRow rowData={ d } editingMonth = { this.props.editing }/>
-                // <div className={'row rows ' + periodHighlight} key={d.loanID}>
-                //     { editWidget }
-                //     <div className='col-md-1'>{ d.period }</div>
-                //     <div className='col-md-2'>{ d.borrower }</div>
-                //     <div className='col-md-2'>{ d.agent }</div>
-                //     <div className='col-md-1'>{ d.dateFunded }</div>
-                //     <div className='col-md-2'>{ bigFormatter.format(d.loanAmount) }</div>
-                //     <div className='col-md-1'>{ d.BPS }</div>
-                //     <div className='col-md-2'>{ formatter.format(d.payout) }</div>
-                // </div>
+                <TableRow key = { d.loanID } rowData={ d } editingMonth = { this.props.editing } position = { this.props.position }/>
               )
           }    
       )
@@ -111,15 +101,15 @@ class Table extends Component {
   buildSubtotalRow(period) {
     if(period[0]) {
       return (
-        <div className='row rows' key={period[0].month + 'sub' + period[0].period}>
+        <div className='row rows subtotal' key={period[0].month + 'sub' + period[0].period}>
             <div className='col-md-1'></div>
             <div className='col-md-1'></div>
             <div className='col-md-2'></div>
-            <div className='col-md-2'></div>
-            <div className='col-md-1'></div>
             <div className='col-md-2'></div>
             <div className='col-md-1'><strong>Subtotal</strong></div>
-            <div className='col-md-2'><strong>{ formatter.format(period[0].period === 1 ? this.state.subTotal1 : this.state.subTotal2) }</strong></div>
+            <div className='col-md-2'><strong>{ bigFormatter.format(period[0].period === 1 ? this.state.fundedSubtotal1 : this.state.fundedSubtotal2) }</strong></div>
+            <div className='col-md-1'></div>
+            <div className='col-md-2'><strong>{ formatter.format(period[0].period === 1 ? this.state.payoutSubtotal1 : this.state.payoutSubtotal2) }</strong></div>
         </div>
       )
     } else return;
@@ -128,15 +118,15 @@ class Table extends Component {
   buildTotalRow(periods) {
     if(periods[0]) {
       return (
-        <div className='row rows' key={periods[0].month + 'total'}>
+        <div className='row rows total' key={periods[0].month + 'total'}>
             <div className='col-md-1'></div>
             <div className='col-md-1'></div>
             <div className='col-md-2'></div>
             <div className='col-md-2'></div>
+            <div className='col-md-1'><strong>Total</strong></div>
+            <div className='col-md-2'><strong>{ this.state.fundedTotal }</strong></div>
             <div className='col-md-1'></div>
             <div className='col-md-2'></div>
-            <div className='col-md-1'><strong>Total Funded</strong></div>
-            <div className='col-md-2'><strong>{ this.state.payout }</strong></div>
         </div>
       )
     } else return;
