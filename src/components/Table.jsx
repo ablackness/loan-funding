@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import TableRow from './TableRow';
 import '../App.css';
 
-// var bigFormatter = new Intl.NumberFormat('en-US', {
-//   style: 'currency',
-//   currency: 'USD',
-//   minimumFractionDigits: 0,
-// });
-
 var formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -21,6 +15,7 @@ var bigFormatter = new Intl.NumberFormat('en-US', {
 });
 
 const payoutReducer = (acc, currentValue) => acc + currentValue.payout;
+// eslint-disable-next-line
 const fundedReducer = (acc, currentValue) => acc + parseInt(currentValue.loanAmount);
 
 const calcPayoutSubtotal = (period) => {
@@ -51,7 +46,8 @@ class Table extends Component {
       payoutSubtotal1: payoutSubtotal1,
       payoutSubtotal2: payoutSubtotal2,
       fundedSubtotal1: fundedSubtotal1,
-      fundedSubtotal2: fundedSubtotal2
+      fundedSubtotal2: fundedSubtotal2,
+      editingRowLoanID: ''
     }
 
     if (props.position === 1) {
@@ -64,6 +60,8 @@ class Table extends Component {
     this.buildTable = this.buildTable.bind(this);
     this.splitPeriods = this.splitPeriods.bind(this);
     this.buildTotalRow = this.buildTotalRow.bind(this);
+    this.updateRowEditingState = this.updateRowEditingState.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
   }
 
   splitPeriods(bothPeriods) {
@@ -80,14 +78,37 @@ class Table extends Component {
     return [first, second];
   }
 
+  updateRowEditingState(loanID) {
+    console.log('updating row editing state');
+    this.setState({
+      editingRowLoanID: loanID
+    })
+    this.props.updateEditingPosition(this.props.position);
+  }
+
+  handleBlur() {
+    console.log('table blur');
+    this.updateRowEditingState('');
+  }
+
   buildTable(data) {
     if(data[0]) {
       data.sort(function(a, b) {
           return (new Date(a.dateFunded) - new Date(b.dateFunded));
       })
       return data.map( d => {
+          var editing;
+          if (d.loanID === this.state.editingRowLoanID && this.props.editingPosition === this.props.position) {
+            editing = true;
+          } else editing = false;
           return (
-                <TableRow key = { d.loanID } rowData={ d } editingMonth = { this.props.editing } position = { this.props.position }/>
+                <TableRow
+                  key = { d.loanID } 
+                  rowData={ d } 
+                  editingRow = { editing } 
+                  position = { this.props.position } 
+                  updateRowEditingState = { this.updateRowEditingState } 
+                />
               )
           }    
       )
@@ -133,6 +154,12 @@ class Table extends Component {
   }
 
   render() {
+    document.body.setAttribute("tabindex",0);
+    document.body.addEventListener('focus', this.handleBlur);
+    document.body.addEventListener('keydown', (event) => {
+      console.log(event.keyCode);
+      if(event.keyCode === 27) this.handleBlur();
+    })
     var periodOneTable = this.buildTable(this.splitPeriods(this.props.data)[0]);
     var periodOneSubtotal = this.buildSubtotalRow(this.splitPeriods(this.props.data)[0]);
     var periodTwoTable = this.buildTable(this.splitPeriods(this.props.data)[1]);

@@ -12,11 +12,13 @@ class MonthDisplay extends Component {
     this.state = {
       month1: '',
       month2: '',
+      tableEditingPosition: 0
     }
 
     this.getData = this.getData.bind(this);
     this.displayData = this.displayData.bind(this);
     this.sortData = this.sortData.bind(this);
+    this.updateTableEditingPosition = this.updateTableEditingPosition.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -165,6 +167,13 @@ class MonthDisplay extends Component {
     return results;
   }
 
+  updateTableEditingPosition(position) {
+    console.log('updating editing position');
+    this.setState({
+      tableEditingPosition: position
+    })
+  }
+
   displayData(lastMonth, month) {
       return (
         <div>
@@ -177,7 +186,13 @@ class MonthDisplay extends Component {
                 <h1 className='monthHeader'>{ this.state.month1 }</h1>
               </div>
             </div>
-            <Table data = { lastMonth } position = { 1 } updatePayoutLastMonthPeriod2 = { this.props.updatePayoutLastMonthPeriod2 }/>
+            <Table 
+              data = { lastMonth } 
+              position = { 1 } 
+              editingPosition = { this.state.tableEditingPosition } 
+              updateEditingPosition = { this.updateTableEditingPosition }
+              updatePayoutLastMonthPeriod2 = { this.props.updatePayoutLastMonthPeriod2 }
+            />
           </div>
           <div className="col-lg-6">
             <div className="row">
@@ -187,7 +202,13 @@ class MonthDisplay extends Component {
                 <h1 className='monthHeader'>{ this.state.month2 }</h1>
               </div>
             </div>
-            <Table data = { month } position = { 2 } updatePayoutThisMonthPeriod1 = { this.props.updatePayoutThisMonthPeriod1 }/>
+            <Table 
+              data = { month } 
+              position = { 2 } 
+              editingPosition = { this.state.tableEditingPosition } 
+              updateEditingPosition = { this.updateTableEditingPosition }
+              updatePayoutThisMonthPeriod1 = { this.props.updatePayoutThisMonthPeriod1 }
+            />
           </div>      
         </div>
       </div>
