@@ -41,7 +41,7 @@ class LoanInput extends Component {
         }
     }
     axios.post("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans",bodyData)
-    .then( () => {
+    .then(() => {
         var messageContainer = document.getElementById("flashMessage");
         messageContainer.textContent = "Thank you for your submission";
         this.setState({
@@ -60,7 +60,7 @@ class LoanInput extends Component {
   }
 
   borrowerChange(event) {
-      this.setState({borrower: event.target.value})
+    this.setState({borrower: event.target.value})
   }
   
   agentChange(event) {
@@ -76,7 +76,7 @@ class LoanInput extends Component {
   }
 
   BPSChange(event) {
-      this.setState({BPS: event.target.value})
+    this.setState({BPS: event.target.value})
   }
 
   render() {

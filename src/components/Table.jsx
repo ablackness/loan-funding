@@ -168,11 +168,11 @@ class Table extends Component {
     return (
       <div className="Table">
         <div className='row titles'>
-            <div className='col-md-1'></div>
+            {/* <div className='col-md-1'></div> */}
             <div className='col-md-1'><strong>PERIOD</strong></div>
             <div className='col-md-2'><strong>BORROWER</strong></div>
             <div className='col-md-2'><strong>AGENT</strong></div>
-            <div className='col-md-1'><strong>FUNDED DATE</strong></div>
+            <div className='col-md-2'><strong>FUNDED DATE</strong></div>
             <div className='col-md-2'><strong>AMOUNT</strong></div>
             <div className='col-md-1'><strong>BPS</strong></div>
             <div className='col-md-2'><strong>PAYOUT</strong></div>

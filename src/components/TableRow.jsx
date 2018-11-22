@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import '../App.css';
 
 var formatter = new Intl.NumberFormat('en-US', {
@@ -38,7 +39,41 @@ class TableRow extends Component {
   }
 
   saveChanges() {
-      //TODO - save changes to DB --need to write lambda function for update
+    //TODO - save changes to DB --need to write lambda function for update
+    console.log('BLUR');
+    var d = new Date(this.state.dateFunded);
+    var month = d.getMonth();
+    var year = d.getFullYear();
+    var period = d.getDate() <= 15 ? 1 : 2
+    var bodyData = {
+        month: month + 1,
+        year: year,
+        period: period,
+        borrower: this.state.borrower,
+        agent: this.state.agent,
+        dateFunded: this.state.dateFunded,
+        loanAmount: this.state.loanAmount,
+        BPS: this.state.BPS
+    }
+
+    axios.patch(`https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans/${this.props.rowData.loanID}`, bodyData)
+    .then(() => {
+        console.log('Update Successful');
+        // var messageContainer = document.getElementById("flashMessage");
+        // messageContainer.textContent = "Thank you for your submission";
+        // this.setState({
+        //     borrower: '',
+        //     agent: '',
+        //     loanAmount: '',
+        //     dateFunded: '',
+        //     BPS: ''
+        // });
+    })
+    .catch((err) => {
+        console.log(err);
+        // var messageContainer = document.getElementById("flashMessage");
+        // messageContainer.textContent = "An error occured. " + err;
+    })
   }
 
   handleInputChange(e) {
@@ -104,7 +139,7 @@ class TableRow extends Component {
           )
     } else {
         return (
-            <div className={'row rows ' + periodHighlight} tabIndex={0}>
+            <div className={'row rows ' + periodHighlight} tabIndex={0} onBlur = { this.saveChanges }>
                 <div className='col-md-1'>{ this.props.rowData.period }</div>
                 <input name='borrower' onChange={ this.handleInputChange } type='text' className='col-md-2 editingBorrower' defaultValue={ this.state.borrower } />
                 <input name='agent' type='text' onChange={ this.handleInputChange }className='col-md-2' defaultValue={ this.state.agent } />
