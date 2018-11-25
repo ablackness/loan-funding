@@ -18,6 +18,7 @@ class Display extends Component {
       UIYear: "",
       showMonths: false,
       data: [],
+      shouldDataUpdate: false,
       lastMonthPeriod2: 0,
       thisMonthPeriod1: 0
     }
@@ -28,11 +29,18 @@ class Display extends Component {
     this.updateShowMonths = this.updateShowMonths.bind(this);
     this.updatePayoutLastMonthPeriod2 = this.updatePayoutLastMonthPeriod2.bind(this);
     this.updatePayoutThisMonthPeriod1 = this.updatePayoutThisMonthPeriod1.bind(this);
+    this.flagDataUpdate = this.flagDataUpdate.bind(this);
   }
 
   updateData(data) {
     this.setState({
       data: data
+    })
+  }
+
+  flagDataUpdate(bool) {
+    this.setState({
+      shouldDataUpdate: bool
     })
   }
 
@@ -120,6 +128,8 @@ class Display extends Component {
                       showMonths={ this.state.showMonths }
                       updateData={ this.updateData }
                       data = { this.state.data }
+                      shouldDataUpdate = { this.state.shouldDataUpdate }
+                      flagDataUpdate = { this.flagDataUpdate }
                       updatePayoutLastMonthPeriod2 = { this.updatePayoutLastMonthPeriod2 }
                       updatePayoutThisMonthPeriod1 = { this.updatePayoutThisMonthPeriod1 }
                     />

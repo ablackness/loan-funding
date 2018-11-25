@@ -39,8 +39,6 @@ class TableRow extends Component {
   }
 
   saveChanges() {
-    //TODO - save changes to DB --need to write lambda function for update
-    console.log('BLUR');
     var d = new Date(this.state.dateFunded);
     var month = d.getMonth();
     var year = d.getFullYear();
@@ -55,25 +53,17 @@ class TableRow extends Component {
         loanAmount: this.state.loanAmount,
         BPS: this.state.BPS
     }
-
     axios.patch(`https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans/${this.props.rowData.loanID}`, bodyData)
     .then(() => {
         console.log('Update Successful');
-        // var messageContainer = document.getElementById("flashMessage");
-        // messageContainer.textContent = "Thank you for your submission";
-        // this.setState({
-        //     borrower: '',
-        //     agent: '',
-        //     loanAmount: '',
-        //     dateFunded: '',
-        //     BPS: ''
-        // });
+        this.props.flagDataUpdate(true);
     })
     .catch((err) => {
         console.log(err);
-        // var messageContainer = document.getElementById("flashMessage");
-        // messageContainer.textContent = "An error occured. " + err;
     })
+
+    
+    // this.props.getData();
   }
 
   handleInputChange(e) {

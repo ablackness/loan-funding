@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../App.css';
 import Table from './Table';
 
-const dev = true;
+const dev = false;
 
 class MonthDisplay extends Component {
   constructor(props) {
@@ -149,10 +149,17 @@ class MonthDisplay extends Component {
     }
   }
 
+  componentDidUpdate() {
+    if(this.props.shouldDataUpdate) {
+      this.getData();
+    }
+  }
+
   getData() {
     axios.get("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans")
     .then( (data) => {
       this.props.updateData(data.data);
+      this.props.flagDataUpdate(false);
     }).catch(err => console.log(err));
   }
 
@@ -192,6 +199,8 @@ class MonthDisplay extends Component {
               editingPosition = { this.state.tableEditingPosition } 
               updateEditingPosition = { this.updateTableEditingPosition }
               updatePayoutLastMonthPeriod2 = { this.props.updatePayoutLastMonthPeriod2 }
+              // getData = { this.getData }
+              flagDataUpdate = { this.props.flagDataUpdate }
             />
           </div>
           <div className="col-lg-6">
@@ -208,6 +217,8 @@ class MonthDisplay extends Component {
               editingPosition = { this.state.tableEditingPosition } 
               updateEditingPosition = { this.updateTableEditingPosition }
               updatePayoutThisMonthPeriod1 = { this.props.updatePayoutThisMonthPeriod1 }
+              // getData = { this.getData }
+              flagDataUpdate = { this.props.flagDataUpdate }
             />
           </div>      
         </div>

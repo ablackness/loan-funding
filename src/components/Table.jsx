@@ -107,7 +107,9 @@ class Table extends Component {
                   rowData={ d } 
                   editingRow = { editing } 
                   position = { this.props.position } 
-                  updateRowEditingState = { this.updateRowEditingState } 
+                  updateRowEditingState = { this.updateRowEditingState }
+                  // getData = { this.props.getData }
+                  flagDataUpdate = { this.props.flagDataUpdate }
                 />
               )
           }    
@@ -158,7 +160,7 @@ class Table extends Component {
     document.body.addEventListener('focus', this.handleBlur);
     document.body.addEventListener('keydown', (event) => {
       console.log(event.keyCode);
-      if(event.keyCode === 27) this.handleBlur();
+      if(event.keyCode === 27 || event.keyCode === 13) this.handleBlur();
     })
     var periodOneTable = this.buildTable(this.splitPeriods(this.props.data)[0]);
     var periodOneSubtotal = this.buildSubtotalRow(this.splitPeriods(this.props.data)[0]);
