@@ -38,32 +38,43 @@ class TableRow extends Component {
     this.props.updateRowEditingState(this.props.rowData.loanID);
   }
 
-  saveChanges() {
-    var d = new Date(this.state.dateFunded);
-    var month = d.getMonth();
-    var year = d.getFullYear();
-    var period = d.getDate() <= 15 ? 1 : 2
-    var bodyData = {
-        month: month + 1,
-        year: year,
-        period: period,
-        borrower: this.state.borrower,
-        agent: this.state.agent,
-        dateFunded: this.state.dateFunded,
-        loanAmount: this.state.loanAmount,
-        BPS: this.state.BPS
+  saveChanges(event) {
+      console.log(event.keyCode);
+    if(event.keyCode === 13) {
+        let current = this.state;
+        this.setState({
+            borrower: current.borrower,
+            agent: current.agent,
+            dateFunded: current.dateFunded,
+            loanAmount: current.loanAmount,
+            BPS: current.BPS,
+            payout: current.payout
+        })
+    } else {
+        var d = new Date(this.state.dateFunded);
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        var period = d.getDate() <= 15 ? 1 : 2
+        var bodyData = {
+            month: month + 1,
+            year: year,
+            period: period,
+            borrower: this.state.borrower,
+            agent: this.state.agent,
+            dateFunded: this.state.dateFunded,
+            loanAmount: this.state.loanAmount,
+            BPS: this.state.BPS
+        }
+        axios.patch(`https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans/${this.props.rowData.loanID}`, bodyData)
+        .then(() => {
+            console.log('Update Successful');
+            this.props.updateTotals();
+            this.props.flagDataUpdate(true);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
     }
-    axios.patch(`https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans/${this.props.rowData.loanID}`, bodyData)
-    .then(() => {
-        console.log('Update Successful');
-        this.props.flagDataUpdate(true);
-    })
-    .catch((err) => {
-        console.log(err);
-    })
-
-    
-    // this.props.getData();
   }
 
   handleInputChange(e) {
@@ -139,8 +150,7 @@ class TableRow extends Component {
                 <div className='col-md-2'>{ formatter.format(this.state.payout) }</div>
             </div>
         )
-    }
-      
+    }  
   }
 
   render() { 

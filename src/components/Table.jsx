@@ -18,28 +18,28 @@ const payoutReducer = (acc, currentValue) => acc + currentValue.payout;
 // eslint-disable-next-line
 const fundedReducer = (acc, currentValue) => acc + parseInt(currentValue.loanAmount);
 
-const calcPayoutSubtotal = (period) => {
-  return period.reduce(payoutReducer,0);
-}
+// const calcPayoutSubtotal = (period) => {
+//   return period.reduce(payoutReducer,0);
+// }
 
-const calcFundedSubtotal = (period) => {
-  return period.reduce(fundedReducer,0);
-}
+// const calcFundedSubtotal = (period) => {
+//   return period.reduce(fundedReducer,0);
+// }
 
-const calcFundedTotal = (periods) => {
-  return periods.reduce(fundedReducer, 0);
-}
+// const calcFundedTotal = (periods) => {
+//   return periods.reduce(fundedReducer, 0);
+// }
 
 class Table extends Component {
   constructor(props) {
     super(props);
 
-    var fundedTotal = calcFundedTotal(props.data);
+    let fundedTotal = this.calcFundedTotal(props.data);
     fundedTotal = bigFormatter.format(fundedTotal);
-    var payoutSubtotal1 = calcPayoutSubtotal(this.splitPeriods(props.data)[0]);
-    var payoutSubtotal2 = calcPayoutSubtotal(this.splitPeriods(props.data)[1]);
-    var fundedSubtotal1 = calcFundedSubtotal(this.splitPeriods(props.data)[0]);
-    var fundedSubtotal2 = calcFundedSubtotal(this.splitPeriods(props.data)[1]);
+    let payoutSubtotal1 = this.calcPayoutSubtotal(this.splitPeriods(props.data)[0]);
+    let payoutSubtotal2 = this.calcPayoutSubtotal(this.splitPeriods(props.data)[1]);
+    let fundedSubtotal1 = this.calcFundedSubtotal(this.splitPeriods(props.data)[0]);
+    let fundedSubtotal2 = this.calcFundedSubtotal(this.splitPeriods(props.data)[1]);
 
     this.state = {
       fundedTotal: fundedTotal,
@@ -62,11 +62,43 @@ class Table extends Component {
     this.buildTotalRow = this.buildTotalRow.bind(this);
     this.updateRowEditingState = this.updateRowEditingState.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
+    this.calcFundedSubtotal = this.calcFundedSubtotal.bind(this);
+    this.calcFundedTotal = this.calcFundedTotal.bind(this);
+    this.calcPayoutSubtotal = this.calcPayoutSubtotal.bind(this);
+    this.updateTotals = this.updateTotals.bind(this);
+  }
+
+  calcPayoutSubtotal = (period) => {
+    return period.reduce(payoutReducer,0);
+  }
+  
+  calcFundedSubtotal = (period) => {
+    return period.reduce(fundedReducer,0);
+  }
+  
+  calcFundedTotal = (periods) => {
+    return periods.reduce(fundedReducer, 0);
+  }
+
+  updateTotals() {
+    let fTotal = this.calcFundedTotal(this.props.data);
+    fTotal = bigFormatter.format(fTotal);
+    let pSubtotal1 = this.calcPayoutSubtotal(this.splitPeriods(this.props.data)[0]);
+    let pSubtotal2 = this.calcPayoutSubtotal(this.splitPeriods(this.props.data)[1]);
+    let fSubtotal1 = this.calcFundedSubtotal(this.splitPeriods(this.props.data)[0]);
+    let fSubtotal2 = this.calcFundedSubtotal(this.splitPeriods(this.props.data)[1]);
+    this.setState({
+      fundedTotal: fTotal,
+      payoutSubtotal1: pSubtotal1,
+      payoutSubtotal2: pSubtotal2,
+      fundedSubtotal1: fSubtotal1,
+      fundedSubtotal2: fSubtotal2
+    })
   }
 
   splitPeriods(bothPeriods) {
-    var first = [];
-    var second = [];
+    let first = [];
+    let second = [];
     bothPeriods.forEach( record => {
       // eslint-disable-next-line
       if(record.period == 1){
@@ -97,7 +129,7 @@ class Table extends Component {
           return (new Date(a.dateFunded) - new Date(b.dateFunded));
       })
       return data.map( d => {
-          var editing;
+          let editing;
           if (d.loanID === this.state.editingRowLoanID && this.props.editingPosition === this.props.position) {
             editing = true;
           } else editing = false;
@@ -108,8 +140,8 @@ class Table extends Component {
                   editingRow = { editing } 
                   position = { this.props.position } 
                   updateRowEditingState = { this.updateRowEditingState }
-                  // getData = { this.props.getData }
                   flagDataUpdate = { this.props.flagDataUpdate }
+                  updateTotals = { this.updateTotals }
                 />
               )
           }    
@@ -162,11 +194,11 @@ class Table extends Component {
       console.log(event.keyCode);
       if(event.keyCode === 27 || event.keyCode === 13) this.handleBlur();
     })
-    var periodOneTable = this.buildTable(this.splitPeriods(this.props.data)[0]);
-    var periodOneSubtotal = this.buildSubtotalRow(this.splitPeriods(this.props.data)[0]);
-    var periodTwoTable = this.buildTable(this.splitPeriods(this.props.data)[1]);
-    var periodTwoSubtotal = this.buildSubtotalRow(this.splitPeriods(this.props.data)[1]);
-    var monthTotal = this.buildTotalRow(this.props.data);
+    let periodOneTable = this.buildTable(this.splitPeriods(this.props.data)[0]);
+    let periodOneSubtotal = this.buildSubtotalRow(this.splitPeriods(this.props.data)[0]);
+    let periodTwoTable = this.buildTable(this.splitPeriods(this.props.data)[1]);
+    let periodTwoSubtotal = this.buildSubtotalRow(this.splitPeriods(this.props.data)[1]);
+    let monthTotal = this.buildTotalRow(this.props.data);
     return (
       <div className="Table">
         <div className='row titles'>
