@@ -31,6 +31,7 @@ class TableRow extends Component {
     this.saveChanges = this.saveChanges.bind(this);
     this.createRow = this.createRow.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.deleteRow = this.deleteRow.bind(this);
   }
 
   turnEditingOn(event) {
@@ -38,19 +39,19 @@ class TableRow extends Component {
     this.props.updateRowEditingState(this.props.rowData.loanID);
   }
 
-  saveChanges(event) {
-      console.log(event.keyCode);
-    if(event.keyCode === 13) {
-        let current = this.state;
-        this.setState({
-            borrower: current.borrower,
-            agent: current.agent,
-            dateFunded: current.dateFunded,
-            loanAmount: current.loanAmount,
-            BPS: current.BPS,
-            payout: current.payout
-        })
-    } else {
+  saveChanges() {
+    //   console.log(event.keyCode);
+    // if(event.keyCode === 13) {
+        // let current = this.state;
+        // this.setState({
+        //     borrower: current.borrower,
+        //     agent: current.agent,
+        //     dateFunded: current.dateFunded,
+        //     loanAmount: current.loanAmount,
+        //     BPS: current.BPS,
+        //     payout: current.payout
+        // })
+    // } else {
         var d = new Date(this.state.dateFunded);
         var month = d.getMonth();
         var year = d.getFullYear();
@@ -74,7 +75,11 @@ class TableRow extends Component {
         .catch((err) => {
             console.log(err);
         })
-    }
+    // }
+  }
+
+  deleteRow() {
+      alert('TRASH');
   }
 
   handleInputChange(e) {
@@ -141,11 +146,12 @@ class TableRow extends Component {
     } else {
         return (
             <div className={'row rows ' + periodHighlight} tabIndex={0} onBlur = { this.saveChanges }>
-                <div className='col-md-1'>{ this.props.rowData.period }</div>
+                <span className='delete glyphicon glyphicon-trash' title='Delete this row' onClick={ this.deleteRow }></span>
+                <div className='col-md-1 periodRow'>{ this.props.rowData.period }</div>
                 <input name='borrower' onChange={ this.handleInputChange } type='text' className='col-md-2 editingBorrower' defaultValue={ this.state.borrower } />
                 <input name='agent' type='text' onChange={ this.handleInputChange }className='col-md-2' defaultValue={ this.state.agent } />
                 <input name='dateFunded' type='text' onChange={ this.handleInputChange } className='col-md-2' defaultValue={ this.state.dateFunded } />
-                <input name='loanAmount' type='text' onChange={ this.handleInputChange } className='col-md-2' defaultValue={ bigFormatter.format(this.state.loanAmount) } />
+                <input name='loanAmount' type="number" min="0" step="1"  onChange={ this.handleInputChange } className='col-md-2' defaultValue={ bigFormatter.format(this.state.loanAmount) } />
                 <input name='BPS' type='number' onChange={ this.handleInputChange } className='col-md-1' defaultValue={ this.state.BPS } />
                 <div className='col-md-2'>{ formatter.format(this.state.payout) }</div>
             </div>

@@ -112,6 +112,22 @@ body {
   padding: 0;
 }
 
+/* Delete button */
+.delete {
+  position: absolute;
+  left: 6px;
+  margin-top: 4px;
+  color: maroon;
+}
+
+.relativeParent {
+  position: relative;
+}
+
+.glyphicon {
+  top: auto;
+}
+
 /*Modal Styling */
 .modal {
   background-color: rgba(0,0,0,0.5);
