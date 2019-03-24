@@ -33,6 +33,8 @@ class Display extends Component {
   }
 
   updateData(data) {
+    console.log('UPDATE DATA');
+    console.log(data);
     this.setState({
       data: data
     })

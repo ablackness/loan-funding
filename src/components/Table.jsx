@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TableRow from './TableRow';
+import SubtotalRow from './SubtotalRow';
 import '../App.css';
 
 var formatter = new Intl.NumberFormat('en-US', {
@@ -81,6 +82,7 @@ class Table extends Component {
   }
 
   updateTotals() {
+    console.log('updateing totals!!!!!!!!!!!!!!!!!!');
     let fTotal = this.calcFundedTotal(this.props.data);
     fTotal = bigFormatter.format(fTotal);
     let pSubtotal1 = this.calcPayoutSubtotal(this.splitPeriods(this.props.data)[0]);
@@ -93,7 +95,7 @@ class Table extends Component {
       payoutSubtotal2: pSubtotal2,
       fundedSubtotal1: fSubtotal1,
       fundedSubtotal2: fSubtotal2
-    })
+    }, () => console.log('TABLE STATE IN CALLBACK', this.state))
   }
 
   splitPeriods(bothPeriods) {
@@ -142,6 +144,7 @@ class Table extends Component {
                   updateRowEditingState = { this.updateRowEditingState }
                   flagDataUpdate = { this.props.flagDataUpdate }
                   updateTotals = { this.updateTotals }
+                  getData = { this.props.getData }
                 />
               )
           }    
@@ -153,19 +156,18 @@ class Table extends Component {
     }
   }
 
-  buildSubtotalRow(period) {
-    if(period[0]) {
+  buildSubtotalRow(p) {
+    // console.log('BUILD SUBTOTAL ROW');
+    // console.log(this.state);
+    if(p[0]) {
       return (
-        <div className='row rows subtotal' key={period[0].month + 'sub' + period[0].period}>
-            <div className='col-md-1'></div>
-            <div className='col-md-1'></div>
-            <div className='col-md-2'></div>
-            <div className='col-md-2'></div>
-            <div className='col-md-1'><strong>Subtotal</strong></div>
-            <div className='col-md-2'><strong>{ bigFormatter.format(period[0].period === 1 ? this.state.fundedSubtotal1 : this.state.fundedSubtotal2) }</strong></div>
-            <div className='col-md-1'></div>
-            <div className='col-md-2'><strong>{ formatter.format(period[0].period === 1 ? this.state.payoutSubtotal1 : this.state.payoutSubtotal2) }</strong></div>
-        </div>
+        <SubtotalRow
+          period = { p }
+          fundedSubtotal1 = { this.state.fundedSubtotal1 }
+          fundedSubtotal2 = { this.state.fundedSubtotal2 }
+          payoutSubtotal1 = { this.state.payoutSubtotal1 }
+          payoutSubtotal2 = { this.state.payoutSubtotal2 }
+        />
       )
     } else return;
   }
@@ -189,11 +191,11 @@ class Table extends Component {
 
   render() {
     document.body.setAttribute("tabindex",0);
-    document.body.addEventListener('focus', this.handleBlur);
-    document.body.addEventListener('keydown', (event) => {
-      console.log(event.keyCode);
-      if(event.keyCode === 27 || event.keyCode === 13) this.handleBlur();
-    })
+    // document.body.addEventListener('focus', this.handleBlur);
+    // document.body.addEventListener('keydown', (event) => {
+    //   console.log(event.keyCode);
+    //   if(event.keyCode === 27 || event.keyCode === 13) this.handleBlur();
+    // })
     let periodOneTable = this.buildTable(this.splitPeriods(this.props.data)[0]);
     let periodOneSubtotal = this.buildSubtotalRow(this.splitPeriods(this.props.data)[0]);
     let periodTwoTable = this.buildTable(this.splitPeriods(this.props.data)[1]);

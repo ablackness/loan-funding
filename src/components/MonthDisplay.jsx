@@ -150,14 +150,17 @@ class MonthDisplay extends Component {
   }
 
   componentDidUpdate() {
-    if(this.props.shouldDataUpdate) {
-      this.getData();
-    }
+    // if(this.props.shouldDataUpdate) {
+    //   this.getData();
+    // }
   }
 
   getData() {
+    console.log('API HIT TO GET DATA');
     axios.get("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans")
-    .then( (data) => {
+    .then((data) => {
+      console.log('API REQUEST SUCCESS');
+      console.log(data.data);
       this.props.updateData(data.data);
       this.props.flagDataUpdate(false);
     }).catch(err => console.log(err));
@@ -199,7 +202,7 @@ class MonthDisplay extends Component {
               editingPosition = { this.state.tableEditingPosition } 
               updateEditingPosition = { this.updateTableEditingPosition }
               updatePayoutLastMonthPeriod2 = { this.props.updatePayoutLastMonthPeriod2 }
-              // getData = { this.getData }
+              getData = { this.getData }
               flagDataUpdate = { this.props.flagDataUpdate }
             />
           </div>
@@ -217,7 +220,7 @@ class MonthDisplay extends Component {
               editingPosition = { this.state.tableEditingPosition } 
               updateEditingPosition = { this.updateTableEditingPosition }
               updatePayoutThisMonthPeriod1 = { this.props.updatePayoutThisMonthPeriod1 }
-              // getData = { this.getData }
+              getData = { this.getData }
               flagDataUpdate = { this.props.flagDataUpdate }
             />
           </div>      

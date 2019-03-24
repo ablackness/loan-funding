@@ -84,13 +84,22 @@ body {
 }
 
 /*Icon styling */
+.iconDiv {
+  /* width: 2px; */
+  /* background-color: grey; */
+}
+
 .icon {
   padding-left: 5px;
   padding-right: 5px;
 }
 
 .pencil {
-  color: #743d10;
+  color: #0b0c50;
+  position: absolute;
+  left: 2px;
+  margin: 4px;
+  z-index: 99;
 }
 
 .x {
@@ -98,7 +107,10 @@ body {
 }
 
 .check {
-  color: forestgreen;
+  color: rgb(35, 114, 39);
+  /* position: absolute; */
+  /* left: 24px; */
+  margin: 0 2px 0 4px;
 }
 
 .pointer {
@@ -114,15 +126,16 @@ body {
 
 /* Delete button */
 .delete {
-  position: absolute;
-  left: 6px;
-  margin-top: 4px;
-  color: maroon;
+  /* position: absolute; */
+  /* left: 6px; */
+  margin: 0 4px 0 2px;
+  color: rgb(146, 13, 13);
 }
 
 .relativeParent {
   position: relative;
 }
+
 
 .glyphicon {
   top: auto;
