@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import YearPicker from "react-year-picker";
 import MonthDisplay from "./MonthDisplay";
+import { Link } from 'react-router-dom';
 import '../App.css';
 
 var formatter = new Intl.NumberFormat('en-US', {
@@ -33,8 +34,6 @@ class Display extends Component {
   }
 
   updateData(data) {
-    console.log('UPDATE DATA');
-    console.log(data);
     this.setState({
       data: data
     })
@@ -125,6 +124,7 @@ class Display extends Component {
             { legend }
           </div>
         </div>
+        <Link to='input' className='newLoan'>Add a new loan</Link>
         <MonthDisplay UIMonth={ this.state.UIMonth } 
                       UIYear={ this.state.UIYear } 
                       showMonths={ this.state.showMonths }
@@ -134,6 +134,7 @@ class Display extends Component {
                       flagDataUpdate = { this.flagDataUpdate }
                       updatePayoutLastMonthPeriod2 = { this.updatePayoutLastMonthPeriod2 }
                       updatePayoutThisMonthPeriod1 = { this.updatePayoutThisMonthPeriod1 }
+                      className='MonthDisplay'
                     />
       </div>
     );

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import TableRow from './TableRow';
 import SubtotalRow from './SubtotalRow';
+import TotalRow from './TotalRow';
 import '../App.css';
 
-var formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-});
+// var formatter = new Intl.NumberFormat('en-US', {
+//   style: 'currency',
+//   currency: 'USD',
+//   minimumFractionDigits: 2,
+// });
 
 var bigFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -157,34 +158,17 @@ class Table extends Component {
   }
 
   buildSubtotalRow(p) {
-    // console.log('BUILD SUBTOTAL ROW');
-    // console.log(this.state);
     if(p[0]) {
       return (
-        <SubtotalRow
-          period = { p }
-          fundedSubtotal1 = { this.state.fundedSubtotal1 }
-          fundedSubtotal2 = { this.state.fundedSubtotal2 }
-          payoutSubtotal1 = { this.state.payoutSubtotal1 }
-          payoutSubtotal2 = { this.state.payoutSubtotal2 }
-        />
+        <SubtotalRow period = { p } />
       )
     } else return;
   }
 
-  buildTotalRow(periods) {
-    if(periods[0]) {
+  buildTotalRow(ps) {
+    if(ps[0]) {
       return (
-        <div className='row rows total' key={periods[0].month + 'total'}>
-            <div className='col-md-1'></div>
-            <div className='col-md-1'></div>
-            <div className='col-md-2'></div>
-            <div className='col-md-2'></div>
-            <div className='col-md-1'><strong>Total</strong></div>
-            <div className='col-md-2'><strong>{ this.state.fundedTotal }</strong></div>
-            <div className='col-md-1'></div>
-            <div className='col-md-2'></div>
-        </div>
+        <TotalRow periods = { ps } />
       )
     } else return;
   }

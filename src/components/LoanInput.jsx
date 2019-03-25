@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class LoanInput extends Component {
   constructor(props) {
@@ -107,6 +108,7 @@ class LoanInput extends Component {
             <button type="submit" className="btn btn-primary">Submit new Loan</button>
         </form>
         <p id="flashMessage"></p>
+        <Link to='/'>Go home</Link>
       </div>
     );
   }

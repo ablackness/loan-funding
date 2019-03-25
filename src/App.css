@@ -50,6 +50,11 @@ body {
   z-index: 5;
 }
 
+/* Month Display Container */
+.MonthDisplay {
+  clear: both;
+}
+
 /* Table Header */
 .rows, .titles{
   text-align: center;
@@ -57,6 +62,12 @@ body {
 
 .rows div, .titles div {
   padding: 0;
+}
+
+/* Link to new loan page */
+.newLoan {
+  float: left;
+  padding-left: 10px;
 }
 
 /* Highlight rows for selected months payout */
@@ -126,8 +137,6 @@ body {
 
 /* Delete button */
 .delete {
-  /* position: absolute; */
-  /* left: 6px; */
   margin: 0 4px 0 2px;
   color: rgb(146, 13, 13);
 }
@@ -142,18 +151,14 @@ body {
 }
 
 /*Modal Styling */
-.modal {
-  background-color: rgba(0,0,0,0.5);
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.modalTitle {
+  margin-top: 0px;
 }
 
-#modalButton {
-  position: absolute;
+.dialog-yes {
+  margin: 8px;
+}
+
+.dialog-no {
+  margin: 8px;
 }
