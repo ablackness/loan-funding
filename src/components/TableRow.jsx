@@ -70,7 +70,6 @@ class TableRow extends Component {
         this.showSaveButton = this.showSaveButton.bind(this);
         this.deleteRow = this.deleteRow.bind(this);
         this.openModal = this.openModal.bind(this);
-        this.afterOpenModal = this.afterOpenModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
 
     }
@@ -104,24 +103,13 @@ class TableRow extends Component {
         })
     }
 
-    // getSnapshotBeforeUpdate(prevProps, prevState) {
-    //     return prevState.loanInfo;
-    // }
-
-    // componentDidUpdate(prevProps, prevState, snapshot) {
-    //     console.log('UPDATING', prevState, snapshot);
-    // }
-
     openModal(e, loanInfo) {
         let type = '';
         if(e.currentTarget.classList.contains('check')) {
-            console.log(1);
             type = 'save';
         } else if(e.currentTarget.classList.contains('glyphicon-remove')) {
-            console.log(2);
             type = 'cancel';
         } else if(e.currentTarget.classList.contains('delete')) {
-            console.log(3);
             type = 'delete';
         }
         if(loanInfo !== undefined) {
@@ -133,17 +121,11 @@ class TableRow extends Component {
         });
     }
     
-    afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        // this.subtitle.style.color = '#f00';
-    }
-
     closeModal() {
         this.setState({modalIsOpen: false});
     }
 
     createDialog(options) {
-        console.log('OPTIONS', options);
         let title, message, yesButton, yesCallback, noButton, noCallback;
         ({title, message, yesButton, yesCallback, noButton, noCallback} = options);
         return (
@@ -187,9 +169,9 @@ class TableRow extends Component {
     saveChanges() {
         if(this.state.inputChanged) {
             var d = new Date(this.state.loanInfo.dateFunded);
-            var month = d.getMonth();
-            var year = d.getFullYear();
-            var period = d.getDate() <= 15 ? 1 : 2
+            var month = d.getUTCMonth();
+            var year = d.getUTCFullYear();
+            var period = d.getUTCDate() <= 15 ? 1 : 2
             var bodyData = {
                 month: month + 1,
                 year: year,
@@ -303,9 +285,7 @@ class TableRow extends Component {
             case 'loanAmount':
                 const regex = /[^0-9.]+/g;
                 const numericalLoanAmount = e.target.value.replace(regex, '');
-                // console.log(numericalLoanAmount);
                 this.setState((prevState) => {
-                    console.log('!!!!!!!!!!!!!!!!', prevState);
                     return {
                         loanInfo: {
                             borrower: prevState.loanInfo.borrower,

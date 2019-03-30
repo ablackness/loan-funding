@@ -26,9 +26,9 @@ class LoanInput extends Component {
   handleSubmit(event) {
     event.preventDefault();
     var d = new Date(this.state.dateFunded);
-    var month = d.getMonth();
-    var year = d.getFullYear();
-    var period = d.getDate() <= 15 ? 1 : 2
+    var month = d.getUTCMonth();
+    var year = d.getUTCFullYear();
+    var period = d.getUTCDate() <= 15 ? 1 : 2
     var bodyData = {
         month: month + 1,
         year: year,

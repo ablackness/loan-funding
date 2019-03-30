@@ -149,18 +149,9 @@ class MonthDisplay extends Component {
     }
   }
 
-  componentDidUpdate() {
-    // if(this.props.shouldDataUpdate) {
-    //   this.getData();
-    // }
-  }
-
   getData() {
-    console.log('API HIT TO GET DATA');
     axios.get("https://t3ojby2w53.execute-api.us-east-1.amazonaws.com/LoanDev/loans")
     .then((data) => {
-      console.log('API REQUEST SUCCESS');
-      console.log(data.data);
       this.props.updateData(data.data);
       this.props.flagDataUpdate(false);
     }).catch(err => console.log(err));
@@ -178,7 +169,6 @@ class MonthDisplay extends Component {
   }
 
   updateTableEditingPosition(position) {
-    console.log('updating editing position');
     this.setState({
       tableEditingPosition: position
     })

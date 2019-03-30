@@ -4,12 +4,6 @@ import SubtotalRow from './SubtotalRow';
 import TotalRow from './TotalRow';
 import '../App.css';
 
-// var formatter = new Intl.NumberFormat('en-US', {
-//   style: 'currency',
-//   currency: 'USD',
-//   minimumFractionDigits: 2,
-// });
-
 var bigFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -19,18 +13,6 @@ var bigFormatter = new Intl.NumberFormat('en-US', {
 const payoutReducer = (acc, currentValue) => acc + currentValue.payout;
 // eslint-disable-next-line
 const fundedReducer = (acc, currentValue) => acc + parseInt(currentValue.loanAmount);
-
-// const calcPayoutSubtotal = (period) => {
-//   return period.reduce(payoutReducer,0);
-// }
-
-// const calcFundedSubtotal = (period) => {
-//   return period.reduce(fundedReducer,0);
-// }
-
-// const calcFundedTotal = (periods) => {
-//   return periods.reduce(fundedReducer, 0);
-// }
 
 class Table extends Component {
   constructor(props) {
@@ -63,7 +45,6 @@ class Table extends Component {
     this.splitPeriods = this.splitPeriods.bind(this);
     this.buildTotalRow = this.buildTotalRow.bind(this);
     this.updateRowEditingState = this.updateRowEditingState.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
     this.calcFundedSubtotal = this.calcFundedSubtotal.bind(this);
     this.calcFundedTotal = this.calcFundedTotal.bind(this);
     this.calcPayoutSubtotal = this.calcPayoutSubtotal.bind(this);
@@ -83,7 +64,6 @@ class Table extends Component {
   }
 
   updateTotals() {
-    console.log('updateing totals!!!!!!!!!!!!!!!!!!');
     let fTotal = this.calcFundedTotal(this.props.data);
     fTotal = bigFormatter.format(fTotal);
     let pSubtotal1 = this.calcPayoutSubtotal(this.splitPeriods(this.props.data)[0]);
@@ -96,7 +76,7 @@ class Table extends Component {
       payoutSubtotal2: pSubtotal2,
       fundedSubtotal1: fSubtotal1,
       fundedSubtotal2: fSubtotal2
-    }, () => console.log('TABLE STATE IN CALLBACK', this.state))
+    })
   }
 
   splitPeriods(bothPeriods) {
@@ -114,16 +94,10 @@ class Table extends Component {
   }
 
   updateRowEditingState(loanID) {
-    console.log('updating row editing state');
     this.setState({
       editingRowLoanID: loanID
     })
     this.props.updateEditingPosition(this.props.position);
-  }
-
-  handleBlur() {
-    console.log('table blur');
-    this.updateRowEditingState('');
   }
 
   buildTable(data) {
@@ -175,11 +149,6 @@ class Table extends Component {
 
   render() {
     document.body.setAttribute("tabindex",0);
-    // document.body.addEventListener('focus', this.handleBlur);
-    // document.body.addEventListener('keydown', (event) => {
-    //   console.log(event.keyCode);
-    //   if(event.keyCode === 27 || event.keyCode === 13) this.handleBlur();
-    // })
     let periodOneTable = this.buildTable(this.splitPeriods(this.props.data)[0]);
     let periodOneSubtotal = this.buildSubtotalRow(this.splitPeriods(this.props.data)[0]);
     let periodTwoTable = this.buildTable(this.splitPeriods(this.props.data)[1]);
@@ -188,7 +157,6 @@ class Table extends Component {
     return (
       <div className="Table">
         <div className='row titles'>
-            {/* <div className='col-md-1'></div> */}
             <div className='col-md-1'><strong>PERIOD</strong></div>
             <div className='col-md-2'><strong>BORROWER</strong></div>
             <div className='col-md-2'><strong>AGENT</strong></div>

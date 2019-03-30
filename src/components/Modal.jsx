@@ -17,10 +17,8 @@ class Modal extends Component {
         // Append the element into the DOM on mount. We'll render
         // into the modal container element (see the HTML tab).
         modalRoot.appendChild(this.el);
-        console.log(this.props.position);
         var modalButton = document.getElementById('modalButton');
         modalButton.setAttribute("style",`top: ${this.props.position.y}px; left: ${this.props.position.x + 100}px;`)
-        console.log('after setting style of button');
         // modalButton.style.left = this.props.position.x;
     }
 
